@@ -114,45 +114,6 @@ INSERT INTO complaints (complaint_id, user_id, title, category, department, prio
  'The air conditioner in Exam Hall 1 is not working. During exams, the temperature is very high making it uncomfortable for students.',
  'Rejected');
 
--- =============================================
--- SAMPLE DATA: Complaint Update History
--- =============================================
-INSERT INTO complaint_updates (complaint_id, updated_by, old_status, new_status, remarks) VALUES
-(2, 1, 'Pending', 'In Progress', 'We have contacted the maintenance team. Issue will be resolved within 2 days.'),
-(3, 1, 'Pending', 'In Progress', 'Checking the network equipment in Hostel Block A.'),
-(3, 1, 'In Progress', 'Resolved', 'WiFi router replaced and network speed improved to 100Mbps. Issue resolved.'),
-(5, 1, 'Pending', 'Rejected', 'The AC was serviced last month. Please check if it is switched on from the main control panel. Closing this complaint.');
 
--- =============================================
--- DEMO SQL QUERIES (for DBMS Viva)
--- =============================================
 
--- Show all tables
--- SHOW TABLES;
 
--- View all users
--- SELECT id, full_name, email, role, created_at FROM users;
-
--- View all complaints with user name (JOIN)
--- SELECT c.complaint_id, u.full_name, c.title, c.category, c.department, c.priority, c.status, c.created_at
--- FROM complaints c
--- JOIN users u ON c.user_id = u.id
--- ORDER BY c.created_at DESC;
-
--- View all status updates (Audit Log)
--- SELECT cu.id, c.complaint_id, u.full_name as updated_by, cu.old_status, cu.new_status, cu.remarks, cu.updated_at
--- FROM complaint_updates cu
--- JOIN complaints c ON cu.complaint_id = c.id
--- JOIN users u ON cu.updated_by = u.id;
-
--- Count complaints by status
--- SELECT status, COUNT(*) as count FROM complaints GROUP BY status;
-
--- Count complaints by category
--- SELECT category, COUNT(*) as count FROM complaints GROUP BY category ORDER BY count DESC;
-
--- Complaints with High priority that are still Pending
--- SELECT complaint_id, title, department, created_at FROM complaints WHERE priority='High' AND status='Pending';
-
--- Find all complaints by a specific user
--- SELECT c.complaint_id, c.title, c.status FROM complaints c JOIN users u ON c.user_id=u.id WHERE u.email='rahul@student.vignan.ac.in';
