@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Students — Admin CMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body class="dashboard-body">
+<%- include('../partials/admin-sidebar', { activePage: 'users' }) %>
+<div class="main-content" id="mainContent">
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="breadcrumb"><span>Admin</span><i class="fas fa-chevron-right"></i><span>Students</span></div>
+            <h1><i class="fas fa-users"></i> Student Management</h1>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header"><h3><i class="fas fa-user-friends"></i> Registered Students (<%= users.length %>)</h3></div>
+        <div class="card-body" style="padding:0">
+            <% if (users.length === 0) { %><div class="empty-state"><i class="fas fa-users"></i><h4>No students registered</h4></div>
+            <% } else { %>
+            <div class="table-responsive">
+                <table class="data-table">
+                    <thead><tr><th>#</th><th>Student</th><th>Phone</th><th>Complaints</th><th>Registered</th></tr></thead>
+                    <tbody>
+                        <% users.forEach((u,i) => { %>
+                        <tr>
+                            <td style="color:var(--text-muted);font-size:0.8rem"><%= i+1 %></td>
+                            <td>
+                                <div style="display:flex;align-items:center;gap:0.65rem">
+                                    <div class="user-avatar-sm"><%= u.full_name.charAt(0).toUpperCase() %></div>
+                                    <div class="user-cell"><strong><%= u.full_name %></strong><small><%= u.email %></small></div>
+                                </div>
+                            </td>
+                            <td style="color:var(--text-muted);font-size:0.85rem"><%= u.phone || '—' %></td>
+                            <td><span class="complaint-count-badge"><i class="fas fa-folder"></i> <%= u.complaint_count %></span></td>
+                            <td style="color:var(--text-muted);font-size:0.78rem"><%= new Date(u.created_at).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) %></td>
+                        </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+        </div>
+    </div>
+</div>
+<script src="/js/admin.js"></script>
+</body>
+</html>

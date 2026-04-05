@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complaint Detail — CMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body class="dashboard-body">
+<%- include('../partials/sidebar', { activePage: 'my-complaints' }) %>
+<div class="main-content" id="mainContent">
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="breadcrumb"><a href="/dashboard">Dashboard</a><i class="fas fa-chevron-right"></i><a href="/complaints">My Complaints</a><i class="fas fa-chevron-right"></i><span><%= complaint.complaint_id %></span></div>
+            <h1><i class="fas fa-file-alt"></i> Complaint Details</h1>
+        </div>
+        <div class="topbar-right">
+            <% if (complaint.status === 'Pending') { %>
+            <a href="/complaints/<%= complaint.id %>/edit" class="btn btn-warning"><i class="fas fa-edit"></i> Edit</a>
+            <form action="/complaints/<%= complaint.id %>/delete" method="POST" style="display:inline" onsubmit="return confirm('Delete this complaint permanently?')">
+                <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete</button>
+            </form>
+            <% } %>
+            <a href="/complaints" class="btn btn-outline"><i class="fas fa-arrow-left"></i> Back</a>
+        </div>
+    </div>
+
+    <div class="detail-grid">
+        <div class="detail-main">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-info-circle"></i> <%= complaint.title %></h3>
+                    <span class="status-badge status-<%= complaint.status.toLowerCase().replace(' ','-') %>"><%= complaint.status %></span>
+                </div>
+                <div class="card-body">
+                    <div class="detail-meta">
+                        <div class="meta-item"><div class="meta-label"><i class="fas fa-hashtag"></i> ID</div><div class="meta-value"><span class="complaint-id"><%= complaint.complaint_id %></span></div></div>
+                        <div class="meta-item"><div class="meta-label"><i class="fas fa-tag"></i> Category</div><div class="meta-value"><span class="category-badge"><%= complaint.category %></span></div></div>
+                        <div class="meta-item"><div class="meta-label"><i class="fas fa-building"></i> Department</div><div class="meta-value"><%= complaint.department %></div></div>
+                        <div class="meta-item"><div class="meta-label"><i class="fas fa-exclamation-triangle"></i> Priority</div><div class="meta-value"><span class="priority-badge priority-<%= complaint.priority.toLowerCase() %>"><%= complaint.priority %></span></div></div>
+                        <div class="meta-item"><div class="meta-label"><i class="fas fa-calendar"></i> Submitted</div><div class="meta-value"><%= new Date(complaint.created_at).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) %></div></div>
+                        <div class="meta-item"><div class="meta-label"><i class="fas fa-clock"></i> Updated</div><div class="meta-value"><%= new Date(complaint.updated_at).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'}) %></div></div>
+                        <% if (complaint.assigned_to) { %><div class="meta-item"><div class="meta-label"><i class="fas fa-user-tie"></i> Assigned To</div><div class="meta-value"><%= complaint.assigned_to %></div></div><% } %>
+                    </div>
+                    <div class="detail-description"><h4><i class="fas fa-align-left"></i> Description</h4><p><%= complaint.description %></p></div>
+                    <% if (complaint.image_path) { %>
+                    <div class="detail-image"><h4><i class="fas fa-image"></i> Attached Image</h4><img src="<%= complaint.image_path %>" alt="Complaint" class="complaint-image" onclick="document.getElementById('lightbox').style.display='flex'" /></div>
+                    <% } %>
+                    <% if (complaint.admin_remarks) { %>
+                    <div class="admin-remarks"><h4><i class="fas fa-comment-dots"></i> Official Remarks</h4><p><%= complaint.admin_remarks %></p></div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <div class="detail-sidebar-col">
+            <div class="card">
+                <div class="card-header"><h3><i class="fas fa-history"></i> Status History</h3></div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item"><div class="timeline-dot dot-submitted"></div><div class="timeline-content"><div class="timeline-status"><i class="fas fa-plus-circle" style="color:#8B5CF6"></i> Submitted</div><span class="timeline-date"><%= new Date(complaint.created_at).toLocaleString('en-IN') %></span></div></div>
+                        <% if (updates && updates.length > 0) { %>
+                        <% updates.forEach((u,i) => { %>
+                        <div class="timeline-item <%= i===updates.length-1?'timeline-current':'' %>">
+                            <div class="timeline-dot dot-<%= u.new_status ? u.new_status.toLowerCase().replace(' ','-') : 'pending' %>"></div>
+                            <div class="timeline-content">
+                                <div class="timeline-status"><span class="status-badge status-<%= u.new_status ? u.new_status.toLowerCase().replace(' ','-') : 'pending' %>" style="font-size:0.62rem"><%= u.new_status || 'Updated' %></span></div>
+                                <span class="timeline-date"><%= new Date(u.updated_at).toLocaleString('en-IN') %></span>
+                                <% if (u.remarks) { %><div class="timeline-remarks"><%= u.remarks %></div><% } %>
+                            </div>
+                        </div>
+                        <% }) %>
+                        <% } else { %>
+                        <div class="timeline-item"><div class="timeline-dot dot-pending"></div><div class="timeline-content"><div class="timeline-status">Awaiting Review</div><span class="timeline-date">No updates yet</span></div></div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<% if (complaint.image_path) { %><div class="lightbox" id="lightbox" style="display:none" onclick="this.style.display='none'"><img src="<%= complaint.image_path %>" alt="Complaint" /></div><% } %>
+<script src="/js/main.js"></script>
+</body>
+</html>

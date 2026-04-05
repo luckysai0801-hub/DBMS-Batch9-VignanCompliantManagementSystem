@@ -1,0 +1,26 @@
+/* complaints.css — Complaint Form Premium Styles */
+
+.form-card .card-body { padding:2rem; }
+
+.priority-options { display:flex; gap:0.75rem; flex-wrap:wrap; }
+.priority-option { cursor:pointer; }
+.priority-option input[type="radio"] { display:none; }
+.priority-option span { display:flex; align-items:center; gap:0.45rem; padding:0.5rem 1.2rem; border-radius:50px; font-size:0.83rem; font-weight:600; border:1.5px solid var(--border); background:var(--surface); transition:all 0.2s ease; cursor:pointer; color:var(--text-secondary); }
+.priority-option:hover span { border-color:var(--primary); color:var(--primary); }
+.priority-option input:checked + span { border-width:2px; font-weight:700; }
+.priority-low-opt    input:checked + span { background:#ECFDF5; border-color:#6EE7B7; color:#065F46; box-shadow:0 0 0 3px rgba(16,185,129,0.1); }
+.priority-medium-opt input:checked + span { background:#FEF9C3; border-color:#FDE047; color:#713F12; box-shadow:0 0 0 3px rgba(245,158,11,0.1); }
+.priority-high-opt   input:checked + span { background:#FEF2F2; border-color:#FCA5A5; color:#991B1B; box-shadow:0 0 0 3px rgba(239,68,68,0.1); }
+
+.file-upload-area { border:2px dashed var(--border); border-radius:var(--radius-lg); padding:2.5rem 1.5rem; text-align:center; cursor:pointer; transition:all 0.25s ease; position:relative; background:var(--bg); }
+.file-upload-area:hover { border-color:var(--primary); background:var(--primary-light); }
+.file-upload-area.drag-over { border-color:var(--primary); background:var(--primary-light); box-shadow:0 0 0 4px rgba(37,99,235,0.08); }
+.file-input { position:absolute; inset:0; opacity:0; cursor:pointer; width:100%; height:100%; }
+.file-upload-label i { font-size:2.5rem; color:var(--primary); margin-bottom:0.75rem; display:block; opacity:0.6; }
+.file-upload-label p { font-weight:600; color:var(--text); margin-bottom:0.3rem; font-size:0.9rem; }
+.file-upload-label span { font-size:0.78rem; color:var(--text-muted); }
+.image-preview { max-height:180px; border-radius:var(--radius-md); margin-top:0.875rem; border:2px solid var(--border); box-shadow:var(--shadow-card); display:block; }
+.current-image { margin-bottom:0.875rem; padding:0.875rem 1rem; background:var(--surface-soft); border-radius:var(--radius-md); border:1px solid var(--border); }
+.current-image p { font-size:0.78rem; color:var(--text-muted); margin-bottom:0.5rem; font-weight:600; }
+
+@media (max-width:640px) { .priority-options { flex-direction:column; } }
